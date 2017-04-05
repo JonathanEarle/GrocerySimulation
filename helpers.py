@@ -31,5 +31,4 @@ def getData():
 			Queues[file]=(arrival,serviceStart,servceEnd,droptime,items,card,waitTime,serviceTime)
 
 	print Queues
-
-getData()
+	return Queues
