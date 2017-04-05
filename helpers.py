@@ -38,26 +38,39 @@ def getElapsed(time1,time2):
 	elapsed = datetime.strptime(time2, '%H:%M:%S') - datetime.strptime(time1, '%H:%M:%S')
 	return elapsed.total_seconds()
 
-def getArrivalRate(arrivals):
-	arrivals=arrivals[0]
+def getArrivalRate(queue):
+	arrivals=queue[0]
 	arrivalRates=[]
 	for i in range(1,len(arrivals)):
 		arrivalRates.append(getElapsed(arrivals[i-1],arrivals[i]))
 	return 1/(np.mean(arrivalRates)/60)
 
-def getServiceRate(time):
-	time=time[7]
+def getServiceRate(queue):
+	time=queue[7]
 	return 1/(np.mean(time)/60)
 
-def getWaitTime(time):
-	time=time[6]
+def getWaitTime(queue):
+	time=queue[6]
 	return np.mean(time)/60
 
-getData()
-for queue in Queues:
-	print queue
-	print "Arrival Rate " ,getArrivalRate(Queues[queue])
-	print "Service Rate " ,getServiceRate(Queues[queue])
-	print "Wait Time " ,getWaitTime(Queues[queue])
-	print "\n"
+def getServiceUtil(arrival,service):
+	return arrival/service
 
+
+def main():
+	getData()
+	for queue in Queues:
+		print queue
+
+		arr=getArrivalRate(Queues[queue])
+		ser=getServiceRate(Queues[queue])
+		wait=getWaitTime(Queues[queue])
+		
+		print "Arrival Rate " ,arr
+		print "Service Rate " ,ser
+		print "Wait Time " ,wait
+		print "Service Utilization " ,getServiceUtil(arr,ser)
+		print "\n"
+
+if __name__=="__main__":
+	main()
