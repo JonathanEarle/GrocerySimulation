@@ -1,10 +1,12 @@
 import glob, os
+import numpy as np
 import sys
 import csv
+from datetime import datetime
 
-Queues={'Q1':[],'Q2':[],'Q3':[],'Q4':[],'Q5':[],'Exp':[]}
+Queues={}
 
-def toMin(time):
+def toSeconds(time):
 	if(time=='0'):
 		return 0
 	times=time.split(":")
@@ -20,15 +22,42 @@ def getData():
 			droptime=[];items=[];card=[]
 			waitTime=[];serviceTime=[]
 			for row in data:
-				arrival.append(int(row[1].replace(':','')))
-				serviceStart.append(int(row[2].replace(':','')))
-				servceEnd.append(int(row[3].replace(':','')))
-				droptime.append(int(row[4].replace(':','')))
+				arrival.append(row[1])
+				serviceStart.append(row[2])
+				servceEnd.append(row[3])
+				droptime.append(row[4])
 				items.append(row[5])
 				card.append(row[6])
-				waitTime.append(toMin(row[7]))
-				serviceTime.append(toMin(row[8]))
+				waitTime.append(toSeconds(row[7]))
+				serviceTime.append(toSeconds(row[8]))
 			Queues[file]=(arrival,serviceStart,servceEnd,droptime,items,card,waitTime,serviceTime)
 
-	print Queues
 	return Queues
+
+def getElapsed(time1,time2):
+	elapsed = datetime.strptime(time2, '%H:%M:%S') - datetime.strptime(time1, '%H:%M:%S')
+	return elapsed.total_seconds()
+
+def getArrivalRate(arrivals):
+	arrivals=arrivals[0]
+	arrivalRates=[]
+	for i in range(1,len(arrivals)):
+		arrivalRates.append(getElapsed(arrivals[i-1],arrivals[i]))
+	return 1/(np.mean(arrivalRates)/60)
+
+def getServiceRate(time):
+	time=time[7]
+	return 1/(np.mean(time)/60)
+
+def getWaitTime(time):
+	time=time[6]
+	return np.mean(time)/60
+
+getData()
+for queue in Queues:
+	print queue
+	print "Arrival Rate " ,getArrivalRate(Queues[queue])
+	print "Service Rate " ,getServiceRate(Queues[queue])
+	print "Wait Time " ,getWaitTime(Queues[queue])
+	print "\n"
+
