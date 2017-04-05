@@ -20,10 +20,10 @@ def getData():
 			droptime=[];items=[];card=[]
 			waitTime=[];serviceTime=[]
 			for row in data:
-				arrival.append(row[1])
-				serviceStart.append(row[2])
-				servceEnd.append(row[3])
-				droptime.append(row[4])
+				arrival.append(int(row[1].replace(':','')))
+				serviceStart.append(int(row[2].replace(':','')))
+				servceEnd.append(int(row[3].replace(':','')))
+				droptime.append(int(row[4].replace(':','')))
 				items.append(row[5])
 				card.append(row[6])
 				waitTime.append(toMin(row[7]))
