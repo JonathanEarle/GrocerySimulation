@@ -1,4 +1,7 @@
 #Holds all the functions to generate a customer
+
+#Create a customer dictionary {items,card,enter time} only num items and if they use a card are generated
+
 import helpers as hlp
 
 #Returns the current arrival rate of a queue
