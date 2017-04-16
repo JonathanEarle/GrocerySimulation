@@ -8,7 +8,7 @@ import helpers as hlp
 
 #Returns the current arrival rate of a queue
 def genServiceRate(queue):
-	return True
+	return hlp.getServiceRate(queue)
 
 def main():
 	Queues=hlp.getData()
