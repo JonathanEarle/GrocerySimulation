@@ -1,6 +1,10 @@
 #Simulates multiple queues in a grocery and returns their value based on a value function
 import numpy as np 
 from Modules import helpers as hlp
+from Modules import generateCustomer as cust
+from Modules import arrivalCalc as arrRate
+from Modules import serviceCalc as serRate
+from Modules import dropoutCalc as drop
 
 #Computes the value of a queue
 def value(items,avgWaitTime,duration):
@@ -19,10 +23,9 @@ def simulateQueue(QueueData,duration=30.0):
 	service=False #Indicates if someone is currently being serviced
 	
 	#Queue Parameters
-	arrivalRate=hlp.getArrivalRate(QueueData)
+	arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
 	serviceRate=hlp.getServiceRate(QueueData)
-	#index 0 for wait time for cash and 1 for card
-	WaitCashorCard = hlp.TimeDifference(QueueData)
+
 	#Stores time of the next arrival and time the next person finishes being served
 	events={'arrival':0,'service':0} 
 
@@ -36,23 +39,20 @@ def simulateQueue(QueueData,duration=30.0):
 			break
 
 		if event=='arrival':
-			#customer=genCustomer(QueueData)
-			items = hlp.sampleItems(QueueData[4])
-			cardOrCash = hlp.bernolliCard(QueueData)
-			queue.append({'items':items,'card':cardOrCash,'enterTime':elapsed})
-			#arrivalRate=getArrivalRate(QueueData)
+			customer=cust.genCustomer(QueueData)
+			customer['enterTime']=elapsed
+			queue.append(customer)
+
+			arrivalRate=arrRate.genArrivalRate(arrRates,hlp.numItems(queue))
 			events['arrival']+=randExp(arrivalRate) #Get time next person enters the queue
 
 		elif event=='service':
 			customer=queue.pop(0)
-			# if user uses card or cash it increases or leaves their wait time 
-			if customer['card'] == 0:
-				waitTime.append((elapsed-customer['enterTime']) + WaitCashorCard[0])
-			elif customer['card'] == 1:
-				waitTime.append((elapsed-customer['enterTime']) + WaitCashorCard[1])
+			waitTime.append(elapsed-customer['enterTime'])
 			sold.append(customer['items'])
-			#serviceRate=getServiceRate(customer)
+
 			#Get time current person finishes being served
+			#serviceRate=getServiceRate(customer)
 			if len(queue)>0:
 				events['service']+=randExp(serviceRate)
 			else:
