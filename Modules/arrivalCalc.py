@@ -51,12 +51,12 @@ def rateItems(queue):
 	return vals
 
 # Given # of items range it gives the arrival rate
-def genArrivalRate(queue,items):
+def genArrivalRate(rates,items):
 	count =-1
 	for i in rangearr:
 		count +=1
 		if items >= i[0] and items <=i[1]:
-			return rateItems(queue)[count]
+			return rates[count]
 
 def main(): 
 	# So 30 items infront of customer
@@ -65,7 +65,8 @@ def main():
 	for queue in Queues:
 		print(queue)
 		print("Arrival Rate")
-		print(genArrivalRate(Queues[queue],items))
+		rates = rateItems(Queues[queue])
+		print(genArrivalRate(rates,items))
 		print("")
  
 if __name__=="__main__":
