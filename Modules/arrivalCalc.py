@@ -49,7 +49,7 @@ def rateItems(queue):
 	for i in range(len(vals)):
 		if count[i]:
 			vals[i] = vals[i]/float(count[i])
-
+# it has 0 if you cant reach that range of items just fix ur code to suit
 	return vals
 
 # Given # of items range it gives the arrival rate
