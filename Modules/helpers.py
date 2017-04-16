@@ -9,7 +9,7 @@ from datetime import datetime
 dataPath="Data"
 cashierFee=0.25 #Cost per min of a cashier
 
-itemRange = [[1,9], [10,14], [15,19], [20,30], [31,1000]] #Holds the ranges in which items are divided
+itemRange = [[0,9], [10,14], [15,19], [20,30], [31,1000]] #Holds the ranges in which items are divided
 
 #Data handling files
 #-----------------------------------------------------------------------------------------
