@@ -5,6 +5,7 @@ from Modules import generateCustomer as cust
 from Modules import arrivalCalc as arrRate
 from Modules import serviceCalc as serRate
 from Modules import dropoutCalc as drop
+np.seterr(all='ignore')
 
 #Computes the value of a queue
 def value(items,avgWaitTime,duration):
@@ -24,6 +25,8 @@ def simulateQueue(QueueData,duration=30.0):
 	
 	#Queue Parameters
 	arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
+	#arrivalRate=hlp.getServiceRate(QueueData)
+	#print arrRates
 	serviceRate=hlp.getServiceRate(QueueData)
 
 	#Stores time of the next arrival and time the next person finishes being served
