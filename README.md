@@ -1,3 +1,3 @@
 # GrocerySimulation
 
-Contains data collected from a supermarket's queue and a python implementation of their simulation.
+Contains data collected from a supermarket's queues and a python implementation of their simulation.
