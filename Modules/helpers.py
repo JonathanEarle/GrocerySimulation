@@ -70,7 +70,7 @@ def getServiceUtil(arrival,service):
 #Gets the number of items in a simulated queue
 def numItems(queue):
 	items=0
-	for customer in range(0,len(queue)):
+	for customer in queue:
 		items+=customer['items']
 	return items
 #-----------------------------------------------------------------------------------------
@@ -96,23 +96,6 @@ def getProbs(items): #takes in the array of num of items
 		prob.append(ranges[j]/total)
 
 	return prob
-
-def sampleItems(prob):
-	graph = np.cumsum(prob)
-	u = np.random.uniform(0,1)
-	num = -1
-
-	for i in range(len(graph)):
-		if u <= graph[i]:
-			num = i
-			break
-
-	for j in range(len(itemRange)):
-		if num == j:
-			num = random.randrange(itemRange[j][0],itemRange[j][1])
-			#break
-
-	return num
 
 # Accepts the queue and returns the time difference as a tuple the first value is for cash, second for card
 def TimeDifference(queue):

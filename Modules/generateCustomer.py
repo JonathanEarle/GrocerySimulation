@@ -3,6 +3,26 @@
 #Create a customer dictionary {items,card,enter time} only num items and if they use a card are generated
 import helpers as hlp
 import numpy as np
+import random
+
+itemRange = hlp.itemRange
+
+def sampleItems(prob):
+	graph = np.cumsum(prob)
+	u = np.random.uniform(0,1)
+	num = -1
+
+	for i in range(len(graph)):
+		if u <= graph[i]:
+			num = i
+			break
+
+	for j in range(len(itemRange)):
+		if num == j:
+			num = random.randrange(itemRange[j][0],itemRange[j][1])
+			#break
+
+	return num
 
 #Determines if a person uses a card or not
 def cardProb(queue):
