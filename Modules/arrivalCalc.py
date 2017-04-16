@@ -7,7 +7,8 @@
 
 import numpy as np
 import helpers as hlp
-rangearr = [[1,10], [11,20], [21,30], [31,40], [41,100]]
+
+rangearr = hlp.itemRange
 vals = [0,0,0,0,0]
 count = [0,0,0,0,0]
 
@@ -59,8 +60,7 @@ def genArrivalRate(rates,items):
 			return rates[count]
 
 def main(): 
-	# So 30 items infront of customer
-	items = 30
+	items = 30 #30 items infront of customer
 	Queues=hlp.getData()
 	for queue in Queues:
 		print(queue)

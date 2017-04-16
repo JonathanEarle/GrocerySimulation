@@ -4,6 +4,11 @@
 #For a given individual calculate the probability they dropout at this moment given the number of items infront of them
 #And their current wait time
 
+#INSTRUCTIONS FOR GERARD
+
+#FUNCTION #1
+#GIVEN A QUEUE FIND THE PRO
+
 import helpers as hlp
 
 #Returns the current arrival rate of a queue
