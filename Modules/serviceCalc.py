@@ -70,7 +70,7 @@ def genServiceRate(queue,customer):
 	if cardOrCashLiabil > 0 and customer['card'] == 1: #customer used card and using card takes more time
 		paytime = cardOrCashLiabil
 	elif cardOrCashLiabil < 0 and customer['card'] == 0: #customer used cash and using cash takes more time
-		paytime = cardOrCashLiabil
+		paytime = abs(cardOrCashLiabil)
 
 	return (ratePerItem * itemNum) + paytime 
 
