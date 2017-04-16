@@ -1,3 +1,3 @@
 # GrocerySimulation
 
-A simulation of MASSY Supermarket queues.
+Contains data collected from a supermarket's queues and a python implementation of their simulation.

@@ -7,9 +7,10 @@
 
 import numpy as np
 import helpers as hlp
-rangearr = [[1,10], [11,20], [21,30], [31,40], [41,100]]
-vals = [0,0,0,0,0]
-count = [0,0,0,0,0]
+
+rangearr = hlp.itemRange
+vals = [0,0,0,0,0,0]
+count = [0,0,0,0,0,0]
 
 #Returns the current array of arrival rates given the # of items ranges from file
 def rateItems(queue):
@@ -46,26 +47,32 @@ def rateItems(queue):
 	 		count[int(key)]+=1
 
 	for i in range(len(vals)):
-		vals[i] = vals[i]/float(count[i])
-
+		if count[i]:
+			vals[i] =(vals[i]/float(count[i]))
+# it has 0 if you cant reach that range of items just fix ur code to suit
 	return vals
 
 # Given # of items range it gives the arrival rate
-def genArrivalRate(queue,items):
+def genArrivalRate(rates,items):
 	count =-1
 	for i in rangearr:
 		count +=1
 		if items >= i[0] and items <=i[1]:
-			return rateItems(queue)[count]
+			if(rates[count])!=0:
+				return rates[count]
+			if rates[count-1]:
+				return rates[count-1]
+			if rates[count+1]:
+				return rates[count+1]
 
 def main(): 
-	# So 30 items infront of customer
-	items = 30
+	items = 30 #30 items infront of customer
 	Queues=hlp.getData()
 	for queue in Queues:
 		print(queue)
 		print("Arrival Rate")
-		print(genArrivalRate(Queues[queue],items))
+		rates = rateItems(Queues[queue])
+		print(genArrivalRate(rates,items))
 		print("")
  
 if __name__=="__main__":

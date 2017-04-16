@@ -1,4 +1,4 @@
-#Holds all the extra and reused functions in the system
+#Holds all the extra and reused functions/variables in the system
 import glob, os
 import numpy as np
 import sys
@@ -9,8 +9,10 @@ from datetime import datetime
 dataPath="Data"
 cashierFee=0.25 #Cost per min of a cashier
 
-rangearr = [[1,9], [10,14], [15,19], [20,30], [31,100]]
+itemRange = [[0,9], [10,14], [15,19], [20,30], [31,40],[41,1000]] #Holds the ranges in which items are divided
 
+#Data handling files
+#-----------------------------------------------------------------------------------------
 def toSeconds(time):
 	if(time=='0'):
 		return 0
@@ -44,6 +46,9 @@ def getElapsed(time1,time2):
 	elapsed = datetime.strptime(time2, '%H:%M:%S') - datetime.strptime(time1, '%H:%M:%S')
 	return elapsed.total_seconds()
 
+
+#Basic Calculations
+#-----------------------------------------------------------------------------------------
 def getArrivalRate(queue):
 	arrivals=queue[0]
 	interArrivalTime=[]
@@ -61,11 +66,18 @@ def getWaitTime(queue):
 
 def getServiceUtil(arrival,service):
 	return arrival/service
+
+#Gets the number of items in a simulated queue
+def numItems(queue):
+	items=0
+	for customer in queue:
+		items+=customer['items']
+	return items
 #-----------------------------------------------------------------------------------------
 
 def getProbs(items): #takes in the array of num of items
 	ranges = []
-	for j in range(len(rangearr)): ranges.append(0)
+	for j in range(len(itemRange)): ranges.append(0)
 	prob = []
 	total = len(items)
 
@@ -75,7 +87,7 @@ def getProbs(items): #takes in the array of num of items
 
 	for i in range(len(items)):
 		for j in range(len(ranges)):
-			if items[i] >= rangearr[j][0] and items[i] <= rangearr[j][1]:
+			if items[i] >= itemRange[j][0] and items[i] <= itemRange[j][1]:
 				ranges[j] += 1
 				#break
 
@@ -84,45 +96,6 @@ def getProbs(items): #takes in the array of num of items
 		prob.append(ranges[j]/total)
 
 	return prob
-
-def sampleItems(prob):
-	graph = np.cumsum(prob)
-	u = np.random.uniform(0,1)
-	num = -1
-
-	for i in range(len(graph)):
-		if u <= graph[i]:
-			num = i
-			break
-
-	for j in range(len(rangearr)):
-		if num == j:
-			num = random.randrange(rangearr[j][0],rangearr[j][1])
-			#break
-
-	return num
-
-def cardProb(queue):
-	card = queue[5]
-	zero = 0
-	one = 1
-	for i in card:
-		if i == '0':
-			zero +=1
-		else:
-			one +=1 
-	total = zero + one
-	prob = {0:round((zero/float(total)),2),1:round((one/float(total)),2)}
-
-	return prob
-
-# A person comes into the system and it returns the whether they use card (1) or cash (0)
-def bernolliCard(queue):
-	sample = np.random.uniform(0,1)
-	card = cardProb(queue)
-	if sample <= card[0]:
-		return 0
-	return 1
 
 # Accepts the queue and returns the time difference as a tuple the first value is for cash, second for card
 def TimeDifference(queue):
@@ -151,11 +124,12 @@ def TimeDifference(queue):
 def averageServiceTime(queue):
 	item_ranges = []
 	service_time_ranges = []
-	for i in range(len(rangearr)):
+	average_service_time_ranges = []
+	for i in range(len(itemRange)):
 		item_ranges.append(0)
 		service_time_ranges.append([])
+		average_service_time_ranges.append(0)
 	
-	average_service_time_ranges = [0, 0, 0, 0, 0]
 	items = queue[4]
 	service_rates = queue[7]
 	#print queue
@@ -163,8 +137,8 @@ def averageServiceTime(queue):
 		current_items = items[i]
 		current_service_rate = service_rates[i]
 
-		for j in range(len(rangearr)):
-			if current_items >= rangearr[j][0] and current_items <= rangearr[j][1]:
+		for j in range(len(itemRange)):
+			if current_items >= itemRange[j][0] and current_items <= itemRange[j][1]:
 				item_ranges[j] += 1
 				service_time_ranges[j].append(current_service_rate)
 
