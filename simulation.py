@@ -3,8 +3,9 @@ import numpy as np
 from Modules import helpers as hlp
 from Modules import generateCustomer as cust
 from Modules import arrivalCalc as arrRate
-from Modules import serviceCalc as serRate
+#from Modules import serviceCalc as serRate
 #from Modules import dropoutCalc as drop
+
 np.seterr(all='ignore')
 
 #Computes the value of a queue
