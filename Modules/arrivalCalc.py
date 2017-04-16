@@ -58,7 +58,12 @@ def genArrivalRate(rates,items):
 	for i in rangearr:
 		count +=1
 		if items >= i[0] and items <=i[1]:
-			return rates[count]
+			if(rates[count])!=0:
+				return rates[count]
+			if rates[count-1]:
+				return rates[count-1]
+			if rates[count+1]:
+				return rates[count+1]
 
 def main(): 
 	items = 30 #30 items infront of customer
