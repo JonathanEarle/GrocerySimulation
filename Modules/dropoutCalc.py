@@ -6,15 +6,14 @@
 
 #INSTRUCTIONS FOR GERARD
 
-#FUNCTION #1
-#GIVEN A QUEUE FIND THE PRO
+#GIVEN A CUSTOMERS ENTER TIME, THE CURRENT TIME (FLOATS) AND THE NUMBER OF ITEMS INFRONT OF THEM GET THE PROBABILITY THEY DROPOUT
 
 import helpers as hlp
 
 #Returns the current arrival rate of a queue
 def dropout(queue):
 	servie_time_end = queue[2]
-    drop_out_list = queue[3]
+	drop_out_list = queue[3]
     arrival_time = queue[0]
     items = queue[4]
     wait_time = queue[6]
