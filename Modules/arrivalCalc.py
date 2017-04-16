@@ -9,8 +9,8 @@ import numpy as np
 import helpers as hlp
 
 rangearr = hlp.itemRange
-vals = [0,0,0,0,0]
-count = [0,0,0,0,0]
+vals = [0,0,0,0,0,0]
+count = [0,0,0,0,0,0]
 
 #Returns the current array of arrival rates given the # of items ranges from file
 def rateItems(queue):
