@@ -47,7 +47,8 @@ def rateItems(queue):
 	 		count[int(key)]+=1
 
 	for i in range(len(vals)):
-		vals[i] = vals[i]/float(count[i])
+		if count[i]:
+			vals[i] = vals[i]/float(count[i])
 
 	return vals
 
