@@ -104,7 +104,7 @@ def main():
 	Queues=hlp.getData()
 	for queue in Queues:
 		print(queue)
-		print("Expected Wait Time, Expected Sevice Time, Expected Sales, Cost of Service, Cost of Waiting")
+		print("Expected Wait Time, Expected Service Time, Expected Sales, Cost of Service, Cost of Waiting")
 		print(monteCarlo(simulateQueue,Queues[queue]))
 		print("")
 
