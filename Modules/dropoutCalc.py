@@ -125,17 +125,15 @@ def get_dropout_probability_ranges(queue):
 
 
 #The get_dropout_probability function accepts the total number of items in front of a given customer and returns the probability that this person drops out of the line. 
-def get_dropout_probability(queue, num_items):
-    drop_out_probability_ranges = get_dropout_probability_ranges(queue)
-    for i in range(len(drop_out_probability_ranges)):
+def get_dropout_probability(dropProbs, num_items):
+    for i in range(len(dropProbs)):
         if num_items >= hlp.itemRange[i][0] and num_items <= hlp.itemRange[i][1]:
-            return drop_out_probability_ranges[i]
+            return dropProbs[i]
 
 
 #The function defined below accepts the total number of items in front of a given person and returns true if that person drops out and false otherwise.
-def bernoulli_drop_out(queue, simQueue):
-    num_items=hlp.numItems(simQueue)
-    drop_probability = get_dropout_probability(queue, num_items)
+def bernoulli_drop_out(dropProbs, num_items):
+    drop_probability = get_dropout_probability(dropProbs, num_items)
     sample = np.random.uniform(0, 1)
     if sample <= drop_probability:
         return True
@@ -146,9 +144,10 @@ def main():
 	for queue in Queues:
 		print(queue)
 		print("Droput")
-		print(dropout(Queues[queue]))
-		#print(bernoulli_drop_out(Queues[queue],50 ))
-		print("")
+        dropProbs= get_dropout_probability_ranges(Queues[queue])
+        print(dropout(Queues[queue]))
+        print(bernoulli_drop_out(dropProbs,50))
+        print("")
  
 if __name__=="__main__":
 	main()
