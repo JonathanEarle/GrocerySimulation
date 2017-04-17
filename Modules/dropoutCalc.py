@@ -133,7 +133,8 @@ def get_dropout_probability(queue, num_items):
 
 
 #The function defined below accepts the total number of items in front of a given person and returns true if that person drops out and false otherwise.
-def bernoulli_drop_out(queue, num_items):
+def bernoulli_drop_out(queue, simQueue):
+    num_items=hlp.numItems(simQueue)
     drop_probability = get_dropout_probability(queue, num_items)
     sample = np.random.uniform(0, 1)
     if sample <= drop_probability:
@@ -146,7 +147,7 @@ def main():
 		print(queue)
 		print("Droput")
 		print(dropout(Queues[queue]))
-		print(bernoulli_drop_out(Queues[queue], 50))
+		#print(bernoulli_drop_out(Queues[queue],50 ))
 		print("")
  
 if __name__=="__main__":

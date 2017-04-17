@@ -3,8 +3,8 @@ import numpy as np
 from Modules import helpers as hlp
 from Modules import generateCustomer as cust
 from Modules import arrivalCalc as arrRate
-#from Modules import serviceCalc as serRate
-#from Modules import dropoutCalc as drop
+from Modules import serviceCalc as serRate
+from Modules import dropoutCalc as drop
 np.seterr(all='ignore')
 
 #Gets the cost of service
@@ -31,7 +31,6 @@ def simulateQueue(QueueData,duration=30.0):
 	
 	#Queue Parameters
 	arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
-	#arrivalRate=hlp.getArrivalRate(QueueData)
 	serviceRate=hlp.getServiceRate(QueueData)
 
 	#Stores time of the next arrival and time the next person finishes being served
@@ -73,10 +72,10 @@ def simulateQueue(QueueData,duration=30.0):
 				events['service']=events['arrival']+service
 
 		#Remove customers which have dropped out of the queue
-		'''for i,customer in queue:
-			if(dropout(customer,queue,elapsed,QueueData)):
+		for i,customer in queue:
+			if(bernoulli_drop_out(QueueData,queue)):
 				del queue[i]
-				dropouts+=1'''
+				dropouts+=1
 
 	probDrop=dropouts/customerCount #Calculate the probability of dropout from the simulation
 	return np.mean(waitTime),np.mean(serveTime),sold,probDrop
