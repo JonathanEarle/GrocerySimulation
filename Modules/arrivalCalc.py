@@ -4,7 +4,6 @@
 #Calculates the rate of arrival based on the number of items in a line
 #Look at arrival rate of line while there are different ranges of items in the line
 
-
 import numpy as np
 import helpers as hlp
 
