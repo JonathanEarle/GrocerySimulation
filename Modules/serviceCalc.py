@@ -12,42 +12,6 @@
 
 import helpers as hlp
 
-def getCardValue(queue):
-	cardOrCash = queue[5]
-	servTime = queue[7]
-	items = queue[4]
-	cardTotal = 0 #gets total service time for card users
-	cardCount = 0
-	cardItems = 0 #gets number of items for card users
-	cashTotal = 0
-	cashCount = 0
-	cashItems = 0
-
-	for i in range(len(servTime)):
-		if servTime[i]!= 0:
-			if cardOrCash == 0:#cash
-				cashTotal += servTime[i]
-				cashCount += 1
-				cashItems += items[i]
-			else: #card
-				cardTotal += servTime[i]
-				cardCount += 1
-				cardItems += items[i]
-
-	if cashCount == 0:
-		cashAvg = 0
-	else:
-		cashAvg = cashTotal / float(cashCount) #gets average service time for cash users
-
-	if cardCount == 0:
-		cardAvg = 0
-	else:
-		cardAvg = cardTotal / float(cardCount)
-
-	cashAvg = cashAvg / float(cashItems) #gets average per item
-	cardAvg = cardAvg / float(cardItems) 
-
-	return cardAvg - cashAvg
 
 def itemAverage(queue):
 	items = queue[4]
@@ -71,13 +35,10 @@ def genServiceRate(queue,customer):
 
 	ratePerItem = servRate / float(itemAvg)
 
-	cardOrCashLiabil = getCardValue(queue)
+	cardOrCashLiabil = hlp.TimeDifference(queue)
 
-	if cardOrCashLiabil > 0 and customer['card'] == 1: #customer used card and using card takes more time
-		paytime = cardOrCashLiabil
-	elif cardOrCashLiabil < 0 and customer['card'] == 0: #customer used cash and using cash takes more time
-		paytime = abs(cardOrCashLiabil)
-
+	paytime = cardOrCashLiabil[0]
+	
 	return (ratePerItem * itemNum) + paytime 
 
 def main():
