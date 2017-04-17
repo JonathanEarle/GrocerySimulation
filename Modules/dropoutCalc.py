@@ -9,6 +9,8 @@
 #GIVEN A CUSTOMERS ENTER TIME, THE CURRENT TIME (FLOATS) AND THE NUMBER OF ITEMS INFRONT OF THEM GET THE PROBABILITY THEY DROPOUT
 
 import helpers as hlp
+from datetime import datetime
+import numpy as np
 
 #Returns the current arrival rate of a queue
 def dropout(queue):

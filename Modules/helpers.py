@@ -124,11 +124,12 @@ def TimeDifference(queue):
 def averageServiceTime(queue):
 	item_ranges = []
 	service_time_ranges = []
+	average_service_time_ranges = []
 	for i in range(len(itemRange)):
 		item_ranges.append(0)
 		service_time_ranges.append([])
+		average_service_time_ranges.append(0)
 	
-	average_service_time_ranges = [0, 0, 0, 0, 0]
 	items = queue[4]
 	service_rates = queue[7]
 	#print queue
