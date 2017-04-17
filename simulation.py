@@ -30,8 +30,8 @@ def simulateQueue(QueueData,duration=30.0):
 	customerCount=0
 	
 	#Queue Parameters
-	arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
-	#arrivalRate=hlp.getArrivalRate(QueueData)
+	#arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
+	arrivalRate=hlp.getArrivalRate(QueueData)
 	serviceRate=hlp.getServiceRate(QueueData)
 
 	#Stores time of the next arrival and time the next person finishes being served
@@ -51,7 +51,7 @@ def simulateQueue(QueueData,duration=30.0):
 			customer['enterTime']=elapsed
 			queue.append(customer)
 
-			arrivalRate=arrRate.genArrivalRate(arrRates,hlp.numItems(queue))
+			#arrivalRate=arrRate.genArrivalRate(arrRates,hlp.numItems(queue))
 			events['arrival']+=randExp(arrivalRate) #Get time next person enters the queue
 
 			customerCount+=1
@@ -74,12 +74,12 @@ def simulateQueue(QueueData,duration=30.0):
 
 		#Remove customers which have dropped out of the queue
 		'''for i,customer in queue:
-			if(dropout(customer, QueueData)):
+			if(dropout(customer,queue,elapsed,QueueData)):
 				del queue[i]
 				dropouts+=1'''
 
-	probDrop=dropouts/customerCount
-	return np.mean(waitTime),np.mean(serveTime),sold,probDrop,duration
+	probDrop=dropouts/customerCount #Calculate the probability of dropout from the simulation
+	return np.mean(waitTime),np.mean(serveTime),sold,probDrop
 
 #Run a monte carlo simulation on a queue
 def monteCarlo(queueSimulation,queue,runs=1000): 
@@ -89,7 +89,7 @@ def monteCarlo(queueSimulation,queue,runs=1000):
     probDrop=[]
 
     for run in range(runs):
-    	wait,service,sold,drops,duration=queueSimulation(queue)
+    	wait,service,sold,drops=queueSimulation(queue)
         waitTime.append(wait)
         itemsSold.append(sold)
         serveTime.append(service)
@@ -104,7 +104,7 @@ def main():
 	Queues=hlp.getData()
 	for queue in Queues:
 		print(queue)
-		print("Expected Wait Time, Expected Sevice Time, Expected Items Sold, Cost of Service, Cost of Waiting")
+		print("Expected Wait Time, Expected Sevice Time, Expected Sales, Cost of Service, Cost of Waiting")
 		print(monteCarlo(simulateQueue,Queues[queue]))
 		print("")
 
