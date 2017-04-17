@@ -165,7 +165,6 @@ def main():
 		print "Service Rate " ,ser
 		print "Wait Time " ,wait
 		print "Service Utilization " ,getServiceUtil(arr,ser)
-		print "Sample Items" ,sampleItems(prob) #return an item
 		print "Time Difference" ,timeDifference , '\n'
 
 		averageServiceTime(Queues[queue])
