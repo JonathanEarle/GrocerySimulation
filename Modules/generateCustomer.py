@@ -7,7 +7,30 @@ import random
 
 itemRange = hlp.itemRange
 
-def sampleItems(prob):
+def getProbs(items): #takes in the array of num of items
+	ranges = []
+	for j in range(len(itemRange)): ranges.append(0)
+	prob = []
+	total = len(items)
+
+	for k in range(len(items)): #gets rids of drop outs that was counted
+		if items[k]==0:
+			total -= 1
+
+	for i in range(len(items)):
+		for j in range(len(ranges)):
+			if items[i] >= itemRange[j][0] and items[i] <= itemRange[j][1]:
+				ranges[j] += 1
+				#break
+
+	total = float(total)
+	for j in range(len(ranges)):
+		prob.append(ranges[j]/total)
+
+	return prob
+
+def sampleItems(items):
+	prob = getProbs(items)
 	graph = np.cumsum(prob)
 	u = np.random.uniform(0,1)
 	num = -1

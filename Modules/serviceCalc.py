@@ -12,16 +12,43 @@
 
 import helpers as hlp
 
+
+
+def itemAverage(queue):
+	items = queue[4]
+	total = 0
+	count = 0
+
+	for i in range(len(items)):
+		if items[i] != 0:
+			total +=items[i]
+			count += 1
+
+	return total / float(count)
+
+
 #Returns the current arrival rate of a queue
-def genServiceRate(queue):
-	return hlp.getServiceRate(queue)
+def genServiceRate(queue,customer):
+	servRate = hlp.getServiceRate(queue)
+	itemAvg = itemAverage(queue)
+	paytime = 0
+	itemNum = customer['items']
+
+	ratePerItem = servRate / float(itemAvg)
+
+	cardOrCashLiabil = hlp.TimeDifference(queue)
+
+	paytime = cardOrCashLiabil[0]
+	
+	return (ratePerItem * itemNum) + paytime 
 
 def main():
 	Queues=hlp.getData()
 	for queue in Queues:
 		print(queue)
 		print("Service Rate")
-		print(genServiceRate(Queues[queue]))
+		cust = {'items':10,'card':0} #generate customer here
+		print(genServiceRate(Queues[queue],cust))
 		print("")
  
 if __name__=="__main__":

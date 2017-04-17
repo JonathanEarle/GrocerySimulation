@@ -52,7 +52,8 @@ def rateItems(queue):
 	return vals
 
 # Given # of items range it gives the arrival rate
-def genArrivalRate(rates,items):
+def genArrivalRate(rates,queue):
+	items=hlp.numItems(queue)
 	count =-1
 	for i in rangearr:
 		count +=1
@@ -65,13 +66,13 @@ def genArrivalRate(rates,items):
 				return rates[count+1]
 
 def main(): 
-	items = 30 #30 items infront of customer
+	#items = 30 #30 items infront of customer
 	Queues=hlp.getData()
 	for queue in Queues:
 		print(queue)
 		print("Arrival Rate")
-		rates = rateItems(Queues[queue])
-		print(genArrivalRate(rates,items))
+		#rates = rateItems(Queues[queue])
+		#print(genArrivalRate(rates,queue))
 		print("")
  
 if __name__=="__main__":
