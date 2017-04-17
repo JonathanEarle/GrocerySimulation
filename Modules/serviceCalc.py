@@ -13,6 +13,7 @@
 import helpers as hlp
 
 
+
 def itemAverage(queue):
 	items = queue[4]
 	total = 0
@@ -46,7 +47,7 @@ def main():
 	for queue in Queues:
 		print(queue)
 		print("Service Rate")
-		cust = {10,0,0} #generate customer here
+		cust = {'items':10,'card':0} #generate customer here
 		print(genServiceRate(Queues[queue],cust))
 		print("")
  
