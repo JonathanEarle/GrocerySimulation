@@ -30,8 +30,8 @@ def simulateQueue(QueueData,duration=30.0):
 	customerCount=0
 	
 	#Queue Parameters
-	#arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
-	arrivalRate=hlp.getArrivalRate(QueueData)
+	arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
+	#arrivalRate=hlp.getArrivalRate(QueueData)
 	serviceRate=hlp.getServiceRate(QueueData)
 
 	#Stores time of the next arrival and time the next person finishes being served
@@ -51,7 +51,7 @@ def simulateQueue(QueueData,duration=30.0):
 			customer['enterTime']=elapsed
 			queue.append(customer)
 
-			#arrivalRate=arrRate.genArrivalRate(arrRates,hlp.numItems(queue))
+			arrivalRate=arrRate.genArrivalRate(arrRates,queue)
 			events['arrival']+=randExp(arrivalRate) #Get time next person enters the queue
 
 			customerCount+=1
