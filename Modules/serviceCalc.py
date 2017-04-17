@@ -26,6 +26,14 @@ def itemAverage(queue):
 
 	return total / float(count)
 
+# returns time to cash 1 item
+def perItem(queue):
+	items = queue[4]
+	start = queue[1][0]
+	end = queue[2][len(queue[0])-1]
+	return hlp.getElapsed(start,end)/sum(items)
+	
+
 
 #Returns the current arrival rate of a queue
 def genServiceRate(queue,customer):
