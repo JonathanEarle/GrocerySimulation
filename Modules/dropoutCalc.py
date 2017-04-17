@@ -12,15 +12,10 @@
 import helpers as hlp
 from datetime import datetime
 import numpy as np
-<<<<<<< HEAD
 
 #Returns the probability of dropout
-=======
- 
-#Returns the current arrival rate of a queue
 
 #Returns an array in which the values represent the average wait time of persons who dropped out of the queue with total number in front of them within the ranges speicified by the hlp.itemRange array.
->>>>>>> c6d95c428eee422ae6f24b4dea91a8ef8690e967
 def dropout(queue):
     service_time_end = queue[2]
     drop_out_list = queue[3]
@@ -46,16 +41,10 @@ def dropout(queue):
             entered_time = datetime.strptime(arrival_time[i], '%H:%M:%S')#we get the time entered of the person who has dropped out
             time_to_compare = datetime.now()
             j = i - 1
-<<<<<<< HEAD
-    
-            while j > 0:
-    
-                if service_time_end[j] == '0':
-=======
+
             #Note that a person is only in front of another in the queue if their service end time(or drop out time) is after the time the current person(i) entered the queue.
             while j > 0:#we use a while loop to trace backward to see who was in the queue at the time the current person(i) was in the queue
                 if service_time_end[j] == '0':#If the service end time is 0 meaning the person has dropped out then we use their drop out time to determine if they were in the queue at the time the current person(i) enetered the queue
->>>>>>> c6d95c428eee422ae6f24b4dea91a8ef8690e967
                     time_to_compare = datetime.strptime(drop_out_list[j], '%H:%M:%S')
                 else:
                     time_to_compare = datetime.strptime(service_time_end[j], '%H:%M:%S')
@@ -75,12 +64,7 @@ def dropout(queue):
         if len(wait_time_ranges[i]) > 0:
             average_wait_time[i] = np.mean(wait_time_ranges[i])
         else:
-<<<<<<< HEAD
-            average_wait_time[i] = 0
-    
-=======
             average_wait_time[i] = 0#no person has had a total number of items in front of them that fell within one of the given ranges. 
->>>>>>> c6d95c428eee422ae6f24b4dea91a8ef8690e967
     return average_wait_time
 
 #The function below gets the total number of items in front of the given person i.
