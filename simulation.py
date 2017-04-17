@@ -5,12 +5,15 @@ from Modules import generateCustomer as cust
 from Modules import arrivalCalc as arrRate
 #from Modules import serviceCalc as serRate
 #from Modules import dropoutCalc as drop
-
 np.seterr(all='ignore')
 
-#Computes the value of a queue
-def value(items,avgWaitTime,duration):
-	return items/(avgWaitTime+(hlp.cashierFee*duration))
+#Gets the cost of service
+def getServiceCost(serveTime):
+	return np.mean(serveTime)*hlp.cashierFee
+
+#Gets the cost of waiting by multiplying expected waiting cost by the probailty of dropout in a queue
+def getWaitingCost(drops, waitTime):
+	return np.mean(drops)*np.mean(waitTime)
 
 #Get an exp~ random number based on an average rate
 def randExp(rate):
@@ -20,14 +23,15 @@ def randExp(rate):
 def simulateQueue(QueueData,duration=30.0):
 	queue=[] #Data for each customer
 	waitTime=[] #Wait time of each served customer
-	sold=[] #Number of items sold
+	serveTime=[] #Service time of each customer
+	sold=0 #Number of items sold
 	elapsed=0
-	service=False #Indicates if someone is currently being serviced
+	dropouts=0
+	customerCount=0
 	
 	#Queue Parameters
 	arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
-	#arrivalRate=hlp.getServiceRate(QueueData)
-	#print arrRates
+	#arrivalRate=hlp.getArrivalRate(QueueData)
 	serviceRate=hlp.getServiceRate(QueueData)
 
 	#Stores time of the next arrival and time the next person finishes being served
@@ -50,45 +54,57 @@ def simulateQueue(QueueData,duration=30.0):
 			arrivalRate=arrRate.genArrivalRate(arrRates,hlp.numItems(queue))
 			events['arrival']+=randExp(arrivalRate) #Get time next person enters the queue
 
+			customerCount+=1
+
 		elif event=='service':
 			customer=queue.pop(0)
 			waitTime.append(elapsed-customer['enterTime'])
-			sold.append(customer['items'])
+			sold+=customer['items']
 
 			#Get time current person finishes being served
 			#serviceRate=getServiceRate(customer)
+			service=randExp(serviceRate)
+			serveTime.append(service)
+
 			if len(queue)>0:
-				events['service']+=randExp(serviceRate)
+				events['service']+=service
 			else:
 				#Case of queue restarting, use last arrival time as base for next service time as arrival=service start in empty queue
-				events['service']=events['arrival']+randExp(serviceRate)
+				events['service']=events['arrival']+service
 
 		#Remove customers which have dropped out of the queue
 		'''for i,customer in queue:
 			if(dropout(customer, QueueData)):
-				del queue[i]'''
+				del queue[i]
+				dropouts+=1'''
 
-	return np.mean(waitTime),np.sum(sold),duration
+	probDrop=dropouts/customerCount
+	return np.mean(waitTime),np.mean(serveTime),sold,probDrop,duration
 
 #Run a monte carlo simulation on a queue
 def monteCarlo(queueSimulation,queue,runs=1000): 
     waitTime=[] #Average wait time of each run of the queue
     itemsSold=[] #Number of items sold in duration
-    Value=[] #Value of the queue
+    serveTime=[]
+    probDrop=[]
 
     for run in range(runs):
-    	wait,sold,duration=queueSimulation(queue)
+    	wait,service,sold,drops,duration=queueSimulation(queue)
         waitTime.append(wait)
         itemsSold.append(sold)
-        Value.append(value(sold,wait,duration))
+        serveTime.append(service)
+        probDrop.append(drops)
 
-    return np.mean(waitTime), np.mean(itemsSold),np.mean(Value)
+    serviceCost=getServiceCost(serveTime)
+    waitCost=getWaitingCost(probDrop,waitTime)
+
+    return np.mean(waitTime),np.mean(serveTime),np.mean(itemsSold),serviceCost, waitCost
 
 def main():
 	Queues=hlp.getData()
 	for queue in Queues:
 		print(queue)
-		print("Expected Wait Time,Expected Items Sold,Value")
+		print("Expected Wait Time, Expected Sevice Time, Expected Items Sold, Cost of Service, Cost of Waiting")
 		print(monteCarlo(simulateQueue,Queues[queue]))
 		print("")
 
