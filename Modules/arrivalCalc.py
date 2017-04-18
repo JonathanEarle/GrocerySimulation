@@ -65,9 +65,9 @@ def genArrivalRate(rates,queue):
 				if rates[count+1] and rates[count] != None:
 					return rates[count+1]
 				else:
-					return hlp.getArrivalRate(queue)
+					return rates[0]
+	return rates[0]
 
-	return hlp.getArrivalRate(queue)
 
 def main(): 
 	#items = 30 #30 items infront of customer
