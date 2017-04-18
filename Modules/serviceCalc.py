@@ -11,6 +11,7 @@
 #GIVEN A CUSTOMER CALCULATE THEIR SERVICE RATE BASED ON THE NUMBER OF ITEMS THEY HAVE AND IF THEY USE A CARD OR NOT
 
 import helpers as hlp
+import numpy as np
 
 # returns time to cash 1 item
 def perItem(queue):

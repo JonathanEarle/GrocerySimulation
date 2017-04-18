@@ -70,7 +70,6 @@ def simulateQueue(QueueData,duration=30.0):
 			queue.append(customer)
 
 			arrivalRate=arrRate.genArrivalRate(arrRates,queue)
-			if(arrRate==None):print "Got None"
 			events['arrival']+=randExp(arrivalRate) #Get time next person enters the queue
 
 			customerCount+=1
