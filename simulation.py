@@ -31,15 +31,18 @@ def simulateQueue(QueueData,duration=30.0):
 	customerCount=0
 	
 	#Queue Parameters
-	card = QueueData[5]
+	card = QueueData[5] 
 	waiting = QueueData[7]
+
 	arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
 	itemAvg = serRate.itemAverage(QueueData) #Average number of items in the queue
 	cardOrCash = hlp.TimeDifference(QueueData) #Service time difference between using card and cash
 	avgServiceRate = hlp.getServiceRate(QueueData) #The average service rate of the queue
 	dropProbs=drop.get_dropout_probability_ranges(QueueData) #Get the probaility of dropout given a number of items in the queue
+
 	servRateCard = serRate.serviceRateCard(card,waiting,cardOrCash)
 	servRateCash = serRate.serviceRateCard(card,waiting,cardOrCash)
+
 	#Stores time of the next arrival and time the next person finishes being served
 	events={'arrival':0,'service':0} 
 
@@ -73,7 +76,6 @@ def simulateQueue(QueueData,duration=30.0):
 			queue.append(customer)
 
 			arrivalRate=arrRate.genArrivalRate(arrRates,queue)
-			if(arrRate==None):print "Got None"
 			events['arrival']+=randExp(arrivalRate) #Get time next person enters the queue
 
 			customerCount+=1
@@ -89,7 +91,6 @@ def simulateQueue(QueueData,duration=30.0):
 				service=randExp(servRateCash)
 			else:
 				service=randExp(servRateCard)
-			# print service
 			serveTime.append(service)
 
 			if len(queue)>0:
@@ -102,7 +103,7 @@ def simulateQueue(QueueData,duration=30.0):
 	return np.mean(waitTime),np.mean(serveTime),np.mean(length),sold,probDrop
 
 #Run a monte carlo simulation on a queue
-def monteCarlo(queueSimulation,queue,runs=1000): 
+def monteCarlo(queue,runs=1000): 
     waitTime=[] #Average wait time of each run of the queue
     itemsSold=[] #Number of items sold in duration
     serveTime=[]
@@ -110,7 +111,7 @@ def monteCarlo(queueSimulation,queue,runs=1000):
     length=[]
 
     for run in range(runs):
-    	wait,service,leng,sold,drops=queueSimulation(queue)
+    	wait,service,leng,sold,drops=simulateQueue(queue)
         waitTime.append(wait)
         itemsSold.append(sold)
         serveTime.append(service)
@@ -127,7 +128,7 @@ def main():
 	for queue in Queues:
 		print(queue)
 		print("Expected Wait Time, Expected Service Time,Expected Length, Expected Sales, Cost of Service, Cost of Waiting")
-		print(monteCarlo(simulateQueue,Queues[queue]))
+		print(monteCarlo(Queues[queue]))
 		print("")
 
 if __name__=="__main__":
