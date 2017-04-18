@@ -24,6 +24,7 @@ def simulateQueue(QueueData,duration=30.0):
 	queue=[] #Data for each customer
 	waitTime=[] #Wait time of each served customer
 	serveTime=[] #Service time of each customer
+	length=[] #Gets the length of the queue each time someone is removed
 	sold=0 #Number of items sold
 	elapsed=0
 	dropouts=0
@@ -75,6 +76,7 @@ def simulateQueue(QueueData,duration=30.0):
 			customerCount+=1
 
 		elif event=='service':
+			length.append(len(queue))
 			customer=queue.pop(0)
 			waitTime.append(elapsed-customer['enterTime'])
 			sold+=customer['items']
@@ -92,7 +94,7 @@ def simulateQueue(QueueData,duration=30.0):
 				events['service']=events['arrival']+service
 
 	probDrop=dropouts/customerCount #Calculate the probability of dropout from the simulation
-	return np.mean(waitTime),np.mean(serveTime),sold,probDrop
+	return np.mean(waitTime),np.mean(serveTime),np.mean(length),sold,probDrop
 
 #Run a monte carlo simulation on a queue
 def monteCarlo(queueSimulation,queue,runs=1000): 
@@ -100,24 +102,26 @@ def monteCarlo(queueSimulation,queue,runs=1000):
     itemsSold=[] #Number of items sold in duration
     serveTime=[]
     probDrop=[]
+    length=[]
 
     for run in range(runs):
-    	wait,service,sold,drops=queueSimulation(queue)
+    	wait,service,leng,sold,drops=queueSimulation(queue)
         waitTime.append(wait)
         itemsSold.append(sold)
         serveTime.append(service)
         probDrop.append(drops)
+        length.append(leng)
 
     serviceCost=getServiceCost(serveTime)
     waitCost=getWaitingCost(probDrop,waitTime)
 
-    return np.mean(waitTime),np.mean(serveTime),np.mean(itemsSold),serviceCost, waitCost
+    return np.mean(waitTime),np.mean(serveTime),np.mean(length),np.mean(itemsSold),serviceCost, waitCost
 
 def main():
 	Queues=hlp.getData()
 	for queue in Queues:
 		print(queue)
-		print("Expected Wait Time, Expected Service Time, Expected Sales, Cost of Service, Cost of Waiting")
+		print("Expected Wait Time, Expected Service Time,Expected Length, Expected Sales, Cost of Service, Cost of Waiting")
 		print(monteCarlo(simulateQueue,Queues[queue]))
 		print("")
 
