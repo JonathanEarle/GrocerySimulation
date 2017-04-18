@@ -117,9 +117,9 @@ def TimeDifference(queue):
 	avgCash = np.mean(avgCash)
 	
 	if (avgCash > avgCard):
-		return (abs(avgCash-avgCard),0)
+		return ( 1 / abs(avgCash-avgCard) / 60,0)
 
-	return (0,abs(avgCash-avgCard))
+	return (0, 1 / abs(avgCash-avgCard) / 60)
 
 def averageServiceTime(queue):
 	item_ranges = []
