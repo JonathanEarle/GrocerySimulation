@@ -35,7 +35,7 @@ def simulateQueue(QueueData,duration=30.0):
 	
 	itemAvg = serRate.itemAverage(QueueData) #Average number of items in the queue
 	cardOrCash = hlp.TimeDifference(QueueData) #Service time difference between using card and cash
-	avgServiceRate = hlp.getServiceRate(QueueData) #The average service rate of the queue
+	avgServiceRate = serRate.getRangedServiceRate(QueueData) #The average service rate of the queue
 	
 	dropProbs=drop.get_dropout_probability_ranges(QueueData) #Get the probaility of dropout given a number of items in the queue
 
