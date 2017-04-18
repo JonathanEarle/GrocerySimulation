@@ -64,6 +64,8 @@ def genArrivalRate(rates,queue):
 				return rates[count-1]
 			if rates[count+1]:
 				return rates[count+1]
+			else:
+				return hlp.genArrivalRate(queue)
 
 def main(): 
 	#items = 30 #30 items infront of customer
