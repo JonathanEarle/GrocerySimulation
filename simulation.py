@@ -32,9 +32,11 @@ def simulateQueue(QueueData,duration=30.0):
 	
 	#Queue Parameters
 	arrRates=arrRate.rateItems(QueueData) #List of possible arrival rates based on the number of items in the queue
+	
 	itemAvg = serRate.itemAverage(QueueData) #Average number of items in the queue
 	cardOrCash = hlp.TimeDifference(QueueData) #Service time difference between using card and cash
 	avgServiceRate = hlp.getServiceRate(QueueData) #The average service rate of the queue
+	
 	dropProbs=drop.get_dropout_probability_ranges(QueueData) #Get the probaility of dropout given a number of items in the queue
 
 	#Stores time of the next arrival and time the next person finishes being served
@@ -82,7 +84,7 @@ def simulateQueue(QueueData,duration=30.0):
 
 			#Get time current person finishes being served
 			serviceRate=serRate.getServiceRate(itemAvg,cardOrCash,avgServiceRate,customer)
-			
+
 			service=randExp(serviceRate)
 			serveTime.append(service)
 
