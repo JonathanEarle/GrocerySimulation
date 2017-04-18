@@ -32,7 +32,7 @@ def itemAverage(queue,itemNum):
 	itemRang = getRange(itemNum) #itemRang is the number of items the customer has (the range it belongs to)
 
 	for i in range(len(items)):
-		if items[i] != 0 and items[i] >= hlp.itemRange[itemRang][0] and items[i] <= hlp.itemRange[itemRang][1]:
+		if items[i] >= hlp.itemRange[itemRang][0] and items[i] <= hlp.itemRange[itemRang][1]:
 			total +=items[i]
 			count += 1
 
@@ -46,7 +46,7 @@ def getRangedServiceRate(queue, itemNum):
 	itemTime = [] #holds times for items within the specified range
 
 	for i in range(len(time)):
-		if items[i]!=0 and items >= hlp.itemRange[itemRang][0] and items[i] <= hlp.itemRange[itemRang][1]:
+		if items >= hlp.itemRange[itemRang][0] and items[i] <= hlp.itemRange[itemRang][1]:
 			itemTime.append(time[i])
 	return 1/(np.mean(itemTime)/60)
 
