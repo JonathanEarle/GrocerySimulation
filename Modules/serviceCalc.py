@@ -65,7 +65,10 @@ def getRangedServiceRate(queue):
 			itemTime[itemRang].append(time[i])
 
 	for i in range(len(hlp.itemRange)):
-		serviceRange.append( 1 / np.mean(itemTime[i]) / 60)
+		if not itemTime[i]:
+			serviceRange.append(0)
+		else:
+			serviceRange.append( 1 / np.mean(itemTime[i]) / 60)
 	
 	return serviceRange
 
