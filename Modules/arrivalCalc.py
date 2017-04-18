@@ -67,6 +67,8 @@ def genArrivalRate(rates,queue):
 				else:
 					return hlp.getArrivalRate(queue)
 
+	return hlp.getArrivalRate(queue)
+
 def main(): 
 	#items = 30 #30 items infront of customer
 	Queues=hlp.getData()
