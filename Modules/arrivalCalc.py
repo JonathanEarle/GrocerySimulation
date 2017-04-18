@@ -36,7 +36,7 @@ def rateItems(queue):
 			for i in rangearr:
 				index +=1
 				if total >= i[0] and total <=i[1]:
-					ranges.append({str(index):1/(np.mean(interArrivalTime)/60)})		
+					ranges.append({str(index):(np.mean(interArrivalTime))})			
 
 	for i in ranges:
 	 	for key in i:
