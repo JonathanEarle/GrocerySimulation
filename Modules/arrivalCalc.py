@@ -58,14 +58,14 @@ def genArrivalRate(rates,queue):
 	for i in rangearr:
 		count +=1
 		if items >= i[0] and items <=i[1]:
-			if(rates[count])!=0:
-				return rates[count]
-			if rates[count-1]:
-				return rates[count-1]
-			if rates[count+1]:
-				return rates[count+1]
-			else:
-				return hlp.genArrivalRate(queue)
+				if(rates[count])!=0 and != None:
+					return rates[count]
+				if rates[count-1] and != None:
+					return rates[count-1]
+				if rates[count+1] and != None:
+					return rates[count+1]
+				else:
+					return hlp.getArrivalRate(queue)
 
 def main(): 
 	#items = 30 #30 items infront of customer
