@@ -12,28 +12,43 @@
 
 import helpers as hlp
 
-
-
-def itemAverage(queue):
-	items = queue[4]
-	total = 0
-	count = 0
-
-	for i in range(len(items)):
-		if items[i] != 0:
-			total +=items[i]
-			count += 1
-
-	return total / float(count)
-
 # returns time to cash 1 item
 def perItem(queue):
 	items = queue[4]
 	start = queue[1][0]
 	end = queue[2][len(queue[0])-1]
 	return hlp.getElapsed(start,end)/sum(items)
-	
 
+def getRange(itemNum):
+	for j in range(len(hlp.itemRange)):
+		if itemNum >= hlp.itemRange[j][0] and itemNum <= hlp.itemRange[j][1]:
+			return j
+	return -1
+
+def itemAverage(queue,itemNum): 
+	items = queue[4]
+	total = 0
+	count = 0
+	itemRang = getRange(itemNum) #itemRang is the number of items the customer has (the range it belongs to)
+
+	for i in range(len(items)):
+		if items[i] != 0 and items[i] >= hlp.itemRange[itemRang][0] and items[i] <= hlp.itemRange[itemRang][1]:
+			total +=items[i]
+			count += 1
+
+	if count == 0: return 0
+	return total / float(count)
+
+def getRangedServiceRate(queue, itemNum):
+	time = queue[7]
+	items = queue[4]
+	itemRang = getRange(itemNum)
+	itemTime = [] #holds times for items within the specified range
+
+	for i in range(len(time)):
+		if items[i]!=0 and items >= hlp.itemRange[itemRang][0] and items[i] <= hlp.itemRange[itemRang][1]:
+			itemTime.append(time[i])
+	return 1/(np.mean(itemTime)/60)
 
 #Returns the current arrival rate of a queue
 def getServiceRate(itemAvg,cardOrCashLiabil,servRate,customer):
@@ -51,11 +66,12 @@ def main():
 		print(queue)
 		print("Service Rate")
 
-		itemAvg = itemAverage(Queues[queue])
-		cardOrCashLiabil = hlp.TimeDifference(Queues[queue])
-		servRate = hlp.getServiceRate(Queues[queue])
-
 		cust = {'items':10,'card':0} #generate customer here
+
+		itemAvg = itemAverage(Queues[queue], cust['items']) #gets average number of items for items within the range of the customer's items bought
+		cardOrCashLiabil = 1 / hlp.TimeDifference(Queues[queue]) / 60
+		servRate = getRangedServiceRate(Queues[queue], cust['items']) #hlp.getServiceRate(Queues[queue])
+
 		print(getServiceRate(itemAvg,cardOrCashLiabil,servRate,cust))
 		print("")
  
