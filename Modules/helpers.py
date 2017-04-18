@@ -53,7 +53,8 @@ def getArrivalRate(queue):
 	arrivals=queue[0]
 	interArrivalTime=[]
 	for i in range(1,len(arrivals)):
-		interArrivalTime.append(getElapsed(arrivals[i-1],arrivals[i]))
+		if arrivals[i-1] and arrivals[i] != '0':
+			interArrivalTime.append(getElapsed(arrivals[i-1],arrivals[i]))
 	return 1/(np.mean(interArrivalTime)/60)
 
 def getServiceRate(queue):
