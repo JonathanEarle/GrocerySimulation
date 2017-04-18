@@ -43,6 +43,8 @@ def sampleItems(items):
 	for j in range(len(itemRange)):
 		if num == j:
 			num = random.randrange(itemRange[j][0],itemRange[j][1])
+			if itemRange[j][1] == 1000:
+				num = random.randrange(itemRange[j][0],100)
 			#break
 
 	return num
