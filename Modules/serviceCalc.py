@@ -11,7 +11,7 @@
 #GIVEN A CUSTOMER CALCULATE THEIR SERVICE RATE BASED ON THE NUMBER OF ITEMS THEY HAVE AND IF THEY USE A CARD OR NOT
 
 import helpers as hlp
-
+import numpy as np
 
 
 def itemAverage(queue):
@@ -34,30 +34,33 @@ def perItem(queue):
 	return hlp.getElapsed(start,end)/sum(items)
 	
 
+# Service rate based on if used cash
+def serviceRateCash(card,time,cardOrCashLiabil):
+	cash = []
+	for i in range(len(time)-1):
+		if card[i] == '0':
+			time [i] = time[i]+cardOrCashLiabil[0]
+			cash.append(time[i])
+	return 1/(np.mean(cash)/60)
 
-#Returns the current arrival rate of a queue
-def getServiceRate(itemAvg,cardOrCashLiabil,servRate,customer):
-	paytime = 0
-	itemNum = customer['items']
+# Service rate based on if used card
 
-	ratePerItem = servRate / float(itemAvg)
-	paytime = cardOrCashLiabil[0]
-	
-	return (ratePerItem * itemNum) + paytime 
+def serviceRateCard(card,time,cardOrCashLiabil):
+	cash = []
+	for i in range(len(time)-1):
+		if card[i] == '1':
+			val = time[i]+cardOrCashLiabil[1]
+			cash.append(val)
+	return 1/(np.mean(cash)/60)
+
 
 def main():
 	Queues=hlp.getData()
 	for queue in Queues:
 		print(queue)
 		print("Service Rate")
-
-		itemAvg = itemAverage(Queues[queue])
 		cardOrCashLiabil = hlp.TimeDifference(Queues[queue])
-		servRate = hlp.getServiceRate(Queues[queue])
+		print serviceRateCard(Queues[queue][5],Queues[queue][7],cardOrCashLiabil)
 
-		cust = {'items':10,'card':0} #generate customer here
-		print(getServiceRate(itemAvg,cardOrCashLiabil,servRate,cust))
-		print("")
- 
 if __name__=="__main__":
 	main()
